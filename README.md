@@ -34,7 +34,7 @@ Classifies what a driver is doing from a single in-cabin camera photo (10 classe
 - Classes are close to balanced
 - `driver_imgs_list.csv` contains a `subject` (driver ID) column
 
-The dataset is **not included** in this repository. Download it from Kaggle (a Kaggle account and acceptance of the competition rules are required) and place it so that the layout is:
+The dataset is **not included** in this repository because its of 4GB but the structure is as follows:
 
 ```
 data/
@@ -68,7 +68,7 @@ data/
 
 ## Setup
 
-Requirements: Python 3.9+, a CUDA-capable GPU is recommended.
+Requirements: Python 3.9+, a CUDA-capable GPU to run locally .
 
 ```bash
 python -m venv venv
@@ -78,47 +78,16 @@ python -m venv venv
 pip install torchvision pandas numpy matplotlib pillow tqdm jupyter
 ```
 
-> If you see `Torch not compiled with CUDA enabled`, a CPU-only PyTorch build is installed. Reinstall PyTorch from the CUDA index inside the same virtual environment.
-
 ## Usage
 
 ```bash
 jupyter notebook
 ```
-
 Open the project notebook, set `train_path` / `test_path` to your local dataset folders, and run all cells. Output: trained model and `final_sub.csv`.
-
-## Known Issues and How They Were Fixed
-
-### Resolved during development
-
-| # | Issue | Cause | Fix |
-|---|-------|-------|-----|
-| 1 | Out-of-memory crash on 480 x 640 images | Images and model too large for memory | Resized every image to 150 x 150 and used a smaller CNN |
-| 2 | Notebook paths failed outside Kaggle | `/kaggle/input/...` exists only on Kaggle servers | Downloaded the dataset and switched to local paths (`data/imgs/train`) |
-| 3 | `KeyError: 'train\c0'` on Windows | `glob` returns backslash paths, so splitting on `/` gave a wrong class name | Used `os.path.basename(...)` instead of `split("/")` |
-| 4 | `Torch not compiled with CUDA enabled` | CPU-only PyTorch was installed, so the GPU was unused | Reinstalled PyTorch from the CUDA index (cu126) in the same virtual environment |
-| 5 | ResNet18 stuck at ~11% accuracy (chance level, loss ~2.5) | The optimiser from the earlier CNN was reused, so ResNet weights were never updated | Created a new optimiser from the ResNet's own parameters; epoch 1 then reached 97.68% |
-
-> **Lesson:** if accuracy equals chance and the loss does not change, check first that the optimiser is attached to the right model.
-
-### Identified issues and planned fixes
-
-These were found during review of the final notebook; the fix is known but has not yet been applied.
-
-| Issue | Why it matters | Planned fix |
-|-------|----------------|-------------|
-| Same drivers in training and validation (~26 drivers, random split) | Validation accuracy is probably optimistic | Split by the `subject` column in `driver_imgs_list.csv` |
-| Horizontal flip augmentation | Swaps left/right meaning (c1/c3, c2/c4) while keeping the old label | Remove `RandomHorizontalFlip` |
-| Shared dataset object after `random_split` | The validation transform can overwrite the training transform, disabling augmentation | Create two `ImageFolder` objects (one per transform) and split the indices |
-| Last epoch kept instead of the best | Epoch 6 (97.99%) is saved instead of epoch 5 (99.11%) | Save a checkpoint at the highest validation accuracy |
-| No per-class metrics | Hard to see which behaviours are confused | Add a confusion matrix and per-class precision/recall |
 
 ## Future work
 
 - Driver-wise split, confusion matrix, per-class metrics
-- Larger input (224 x 224), learning-rate schedule, other backbones (ResNet50, EfficientNet)
-- Grad-CAM explanations
-- Real-time deployment on a camera stream with benchmarked latency and alerting
+mera stream with benchmarked latency and alerting
 
 
