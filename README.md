@@ -28,7 +28,7 @@ Classifies what a driver is doing from a single in-cabin camera photo (10 classe
 
 ## Dataset
 
-
+- Dataset i used is from kaggle.com, cannot be uploaded because of its size
 - ~22,400 labelled training images, ~79,700 unlabelled test images
 - Colour images, 640 x 480 (tensor shape `3 x 480 x 640`)
 - Classes are close to balanced
