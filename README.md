@@ -6,15 +6,13 @@ Classifies what a driver is doing from a single in-cabin camera photo (10 classe
 **Supervisor:** Dr. Ankush Jain
 **Institution:** Netaji Subhas University of Technology (NSUT), Delhi
 
-> A companion paper (`Distracted_Driver_Detection_IEEE_Paper.pdf`) describes the methodology, results and systems analysis.
-
 ---
 
 ## Highlights
 
 - Supervised image classification with 10 driver-behaviour classes
 - Baseline residual CNN vs. **ResNet18 transfer learning** (final model)
-- Best validation accuracy **99.11%** (epoch 5); **97.68%** after the first epoch
+- Best validation accuracy **96.11%** (epoch 5); **97.68%** after the first epoch
 - Trains in about **19 minutes** for 6 epochs on an Intel Core i5, 16 GB RAM, GTX 1650
 - Kaggle-style output: per-class probabilities in `final_sub.csv`
 
@@ -30,7 +28,6 @@ Classifies what a driver is doing from a single in-cabin camera photo (10 classe
 
 ## Dataset
 
-[State Farm Distracted Driver Detection](https://www.kaggle.com/c/state-farm-distracted-driver-detection) (Kaggle).
 
 - ~22,400 labelled training images, ~79,700 unlabelled test images
 - Colour images, 640 x 480 (tensor shape `3 x 480 x 640`)
@@ -68,7 +65,6 @@ data/
 | 5 | 0.0165 | 99.41 | **0.0409** | **99.11** |
 | 6 | 0.0231 | 99.33 | 0.0722 | 97.99 |
 
-Training throughput, derived from wall-clock time, is roughly 94 images/s. Inference latency and GPU utilisation were **not measured**; the paper gives analytical projections only.
 
 ## Setup
 
@@ -125,6 +121,4 @@ These were found during review of the final notebook; the fix is known but has n
 - Grad-CAM explanations
 - Real-time deployment on a camera stream with benchmarked latency and alerting
 
-## Acknowledgements
 
-State Farm and Kaggle for the dataset; PyTorch/torchvision for the framework and pretrained ResNet18 weights.
