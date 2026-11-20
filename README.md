@@ -1,4 +1,4 @@
-# Distracted Driver Detection using PyTorch and Transfer Learning
+# Distracted Driver Detection using PyTorch and Resnet
 
 Classifies what a driver is doing from a single in-cabin camera photo (10 classes) using a baseline CNN and an ImageNet-pretrained **ResNet18** fine-tuned on the Kaggle *State Farm Distracted Driver Detection* dataset.
 
